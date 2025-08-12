@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài Xỉu - Chơi ngay!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div id="video-overlay" class="hidden">
+        <div class="video-container">
+            <video id="withdrawal-video" width="50%" height="auto" controls autoplay>
+                <source src="hrx.mp4">
+                Trình duyệt của bạn không hỗ trợ video.
+            </video>
+        </div>
+    </div>
+
+    <div id="auth-container">
+        <div id="login-view" class="auth-box">
+            <h2>Đăng nhập</h2>
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-username">Tên đăng nhập</label>
+                    <input type="text" id="login-username" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-password">Mật khẩu</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit">Đăng nhập</button>
+            </form>
+            <p>Chưa có tài khoản? <a href="#" id="show-register-link">Đăng ký ngay</a></p>
+        </div>
+
+        <div id="register-view" class="auth-box hidden">
+            <h2>Đăng ký</h2>
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="register-username">Tên đăng nhập</label>
+                    <input type="text" id="register-username" required>
+                </div>
+                <div class="input-group">
+                    <label for="register-password">Mật khẩu</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirm-password" required>
+                </div>
+                <button type="submit">Đăng ký</button>
+            </form>
+            <p>Đã có tài khoản? <a href="#" id="show-login-link">Đăng nhập</a></p>
+        </div>
+    </div>
+
+    <div id="game-container" class="hidden">
+        <div class="header">
+            TÀI XỈU
+        </div>
+
+        <div class="info-panel">
+            <div class="user-info">
+                <i id="user-icon" class="fa-solid fa-circle-user"></i>
+                <span>Số dư:</span>
+                <span id="current-user-balance">0</span>
+                <div id="code-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" id="close-code-modal-btn">&times;</span>
+        <h2>Nhập Key</h2>
+        <div class="input-group">
+            <label for="giftcode-input">Mã Giftcode</label>
+            <input type="text" id="giftcode-input" placeholder="Nhập mã của bạn" required>
+        </div>
+        <button id="submit-code-btn">Xác nhận</button>
+        <p id="code-message"></p>
+    </div>
+</div>
+                <div id="user-menu" class="user-menu hidden">
+                    <a href="#" id="enter-code-btn">Nhập key</a>
+                    <a href="#" id="withdraw-btn">Rút tiền</a>
+                    <a href="#" id="logout-btn">Đăng xuất</a>
+                </div>
+            </div>
+            <div class="timer">
+                <span id="countdown">30s</span>
+            </div>
+        </div>
+
+        <div class="betting-area">
+            <div id="bet-tai" class="bet-option">
+                <div class="bet-header">
+                    <span class="bet-title">TÀI</span>
+                    <span class="bet-total">Tổng cược: <span id="tai-total-bet">0</span></span>
+                    <span class="bet-players">Người chơi: <span id="tai-total-players">0</span></span>
+                </div>
+                <button class="place-bet-btn">Đặt cược</button>
+            </div>
+            <div id="bet-xiu" class="bet-option xiu">
+                <div class="bet-header">
+                    <span class="bet-title">XỈU</span>
+                    <span class="bet-total">Tổng cược: <span id="xiu-total-bet">0</span></span>
+                    <span class="bet-players">Người chơi: <span id="xiu-total-players">0</span></span>
+                </div>
+                <button class="place-bet-btn">Đặt cược</button>
+            </div>
+        </div>
+        
+        <div class="game-result">
+            <div class="dice-game-wrapper">
+                <div class="dice-area">
+                    <div id="dice-container" class="dice-container">
+                        <div class="dice-face">?</div>
+                        <div class="dice-face">?</div>
+                        <div class="dice-face">?</div>
+                    </div>
+                </div>
+                <div id="dice-cover" class="dice-cover">
+                    <span class="cover-text"></span>
+                </div>
+            </div>
+            <span id="result-text" class="result-text">Chờ đặt cược...</span>
+            <div id="post-reveal-countdown" class="hidden"></div>
+        </div>
+
+        <div class="soi-cau-container">
+            <div class="soi-cau-header">
+                <span>Soi Cầu</span>
+                <span id="latest-session-info"></span>
+            </div>
+            <div class="chart-container">
+                <canvas id="scoreChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div id="bet-modal" class="bet-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Đặt cược <span id="modal-bet-type"></span></h3>
+            </div>
+            <div class="bet-amount-display">
+                Số tiền: <span id="current-bet-amount">0</span>
+            </div>
+            <div class="bet-chips">
+                <div class="chip" data-value="1000">1K</div>
+                <div class="chip" data-value="10000">10K</div>
+                <div class="chip" data-value="50000">50K</div>
+                <div class="chip" data-value="100000">100K</div>
+                <div class="chip" data-value="500000">500K</div>
+                <div class="chip" data-value="1000000">1M</div>
+                <div class="chip" data-value="5000000">5M</div>
+                <div class="chip" data-value="10000000">10M</div>
+            </div>
+            <div class="modal-footer">
+                <button id="all-in-btn" class="modal-btn">All-in</button>
+                <button id="confirm-bet-btn" class="modal-btn">Xác nhận</button>
+                <button id="cancel-bet-btn" class="modal-btn">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="code-modal" class="bet-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nhập Giftcode</h3>
+            </div>
+            <input type="text" id="giftcode-input" placeholder="Nhập mã code của bạn...">
+            <div id="code-message" class="hidden"></div>
+            <div class="modal-footer">
+                <button id="submit-code-btn" class="modal-btn">Xác nhận</button>
+                <button id="close-code-modal-btn" class="modal-btn">Đóng</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="withdraw-modal" class="bet-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rút tiền</h3>
+            </div>
+            <form id="withdraw-form">
+                <div class="input-group">
+                    <label for="bank-select">Ngân hàng</label>
+                    <select id="bank-select" required>
+                        <option value="">Chọn ngân hàng</option>
+                        <option value="Vietcombank">Vietcombank</option>
+                        <option value="BIDV">BIDV</option>
+                        <option value="Techcombank">Techcombank</option>
+                        <option value="ACB">ACB</option>
+                        <option value="MBBank">MBBank</option>
+                        <option value="TPBank">TPBank</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="account-number">Số tài khoản</label>
+                    <input type="text" id="account-number" placeholder="Nhập số tài khoản" required>
+                </div>
+                <div class="input-group">
+                    <label for="withdraw-amount">Số tiền rút</label>
+                    <input type="text" id="withdraw-amount" placeholder="Số tiền rút (tối thiểu 500.000 VNĐ)" required>
+                    <span id="withdraw-amount-text" class="withdraw-amount-text-style"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="confirm-withdraw-btn" class="modal-btn">Xác nhận</button>
+                    <button type="button" id="cancel-withdraw-btn" class="modal-btn">Hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
